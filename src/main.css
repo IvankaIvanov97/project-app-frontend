@@ -352,7 +352,7 @@ footer {
     width: fit-content;
 }
 .sort::after {
-    content: url("../img/arrow_down.svg");
+    content: url("./assets/img/arrow_down.svg");
     margin-left: 5px;
 }
 .shop_grid {

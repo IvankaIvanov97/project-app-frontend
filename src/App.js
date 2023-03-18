@@ -1,14 +1,14 @@
-import "./components/main.css";
+import "./main.css";
 
 import Main from "./pages/Main";
-import Portfolio from "./pages/Portfolio";
-import Services from "./pages/Services";
+import Auctions from "./pages/Auctions";
 
 import { Routes, Route } from "react-router-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Vendors from "./pages/Vendors";
 
 function App() {
   return (
@@ -17,9 +17,9 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Main />}></Route>
-          <Route path="/portfolio" element={<Portfolio />}></Route>
-          <Route path="/services/" element={<Services />}></Route>
-          <Route path="*" element={<Error />}></Route>
+          <Route path="/auctions" element={<Auctions />}></Route>
+          <Route path="/vendors" element={<Vendors />}></Route>
+          {/*<Route path="*" element={<Error />}></Route>*/}
         </Routes>
         <Footer />
       </Router>

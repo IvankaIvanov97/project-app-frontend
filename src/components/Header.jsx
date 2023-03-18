@@ -27,9 +27,9 @@ function Header() {
             </div>
             <nav className="two">
                 <ul className="cont">
-                    <li><a href="#">Аукционы</a></li>
-                    <li><a href="#">Продавцы</a></li>
-                    <li><a href="#">Контакты</a></li>
+                    <li><Link to="/auctions">Аукционы</Link></li>
+                    <li><Link to="/vendors">Продавцы</Link></li>
+                    <li><Link to="/">Контакты</Link></li>
                 </ul>
             </nav>
         </header>
