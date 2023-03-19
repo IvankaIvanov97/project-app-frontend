@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 
+import { startTimer } from "../timer"
 import eye from "../assets/img/eye.svg";
 import like from "../assets/img/like.svg";
 import {Link} from "react-router-dom";
@@ -10,37 +11,14 @@ function Lot({ data }) {
     const [bid, setBid] = useState(null)
 
     // let MySQLDate = "2023-05-12T11:40:10.048321";
-    let date;
-    if (timeIn !== undefined) {
-        date = Date.parse( timeIn.replace( /[-]/g, '/' ).replace( "T", ' ' ).split('.')[0] );
-    }
-    const _second = 1000;
-    const _minute = _second * 60;
-    const _hour = _minute * 60;
-    const _day = _hour * 24;
     let timer
 
     useEffect(() => {
         if (bidIn !== undefined) {
             setBid(bidIn)
         }
-        if (date !== undefined) {
-            function showRemaining() {
-                const distance = new Date(date) - new Date();
-                if (distance < 0) {
-                    clearInterval(timer);
-                    setTime({})
-                    return;
-                }
-                let timeObj = {}
-                timeObj["Дни"] = Math.floor(distance / _day);
-                timeObj["Часы"] = Math.floor((distance % _day) / _hour);
-                timeObj["Минуты"] = Math.floor((distance % _hour) / _minute);
-                timeObj["Секунды"] = Math.floor((distance % _minute) / _second);
-                setTime(timeObj)
-            }
-
-            timer = setInterval(showRemaining, 1000);
+        if (timeIn !== undefined) {
+            startTimer(setTime, timer, timeIn)
         }
     }, [])
     return (
@@ -48,7 +26,7 @@ function Lot({ data }) {
             <div className="img_frag">
                 <img className="lot_img" src={image} alt=""/>
                     <div className="lot_btns">
-                        <Link to={`/lot=${id}`} className="btn_lot eye">
+                        <Link to={`/lot/${id}`} className="btn_lot eye">
                             <img src={eye} alt="eye"/>
                         </Link>
                         <Link className="btn_lot like">

@@ -7,10 +7,13 @@ import lot from "../assets/img/lot.png";
 import ava from "../assets/img/ava.png";
 import VendorFilter from "../components/VendorFilter";
 import AuctionFilter from "../components/AuctionFilter";
-import {Link} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 
 function Auctions() {
-    const category = {
+    const { state } = useLocation();
+    const id = state !== null ? state.id : null;
+    const category = state !== null ? state.category : null;
+    const category_ = {
         id: 1,
         name: "Шляпское искусство"
     }
@@ -20,7 +23,7 @@ function Auctions() {
         timeIn: "2023-05-12T11:40:10.048321",
         bidIn: "73Битка"
     }
-    const vendor = {
+    const vendor_ = {
         id: 1,
         name: "Тони Старк",
         image: ava
@@ -37,8 +40,8 @@ function Auctions() {
                     <div className="filter">
                         <div className="filter_block">
                             <p className="filter_head">Фильтр по продавцам</p>
-                            <VendorFilter data={vendor} />
-                            <VendorFilter data={vendor} />
+                            <VendorFilter data={vendor_} />
+                            <VendorFilter data={vendor_} />
                         </div>
                         <div className="filter_block">
                             <p className="filter_head">Новые аункционы</p>
@@ -50,7 +53,7 @@ function Auctions() {
                         <div className="filter_block">
                             <p className="filter_head">Категории аукционов</p>
                             <div className="filter_categories">
-                                <Link to={`auctions/category=${category.name}`}>{category.name}</Link>
+                                <Link to="/auctions" state={category_.name}>{category_.name}</Link>
                             </div>
                         </div>
                     </div>

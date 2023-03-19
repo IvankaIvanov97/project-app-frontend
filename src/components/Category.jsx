@@ -7,7 +7,7 @@ function Category({ data }) {
         <div className="category" style={{ backgroundImage:`url(${image})`}} >
             <h3 className="category_name">{name}</h3>
             <p className="category_count">Аукционов: {countAuctions}</p>
-            <Link to={`/auctions?category=${id}`}>Ебашь как не в себя</Link>
+            <Link to="/auctions" state={{ id: id }}>Ебашь как не в себя</Link>
         </div>
     );
 }

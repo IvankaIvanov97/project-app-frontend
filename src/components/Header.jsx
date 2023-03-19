@@ -1,15 +1,33 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import logo from "../assets/img/logo.svg";
 import search from "../assets/img/search.svg";
 import enter from "../assets/img/enter.svg";
 
 import { Link } from "react-router-dom";
 function Header() {
+    const [active, setActive] = useState(0)
+
+    useEffect(() => {
+        if (window.location.href.indexOf("auctions") >= 0) {
+            setActive(1)
+        }
+        else if (window.location.href.indexOf("vendor") >= 0) {
+            setActive(2)
+        }
+        else if (window.location.href.indexOf("contacts") >= 0) {
+            setActive(3)
+        }
+
+    }, [])
+    function handler(e) {
+        setActive(e)
+    }
+
     return (
         <header>
             <div className="cont">
                 <div className="one">
-                    <Link to="/" className="logo">
+                    <Link onClick={(e) => handler(0)} to="/" className="logo">
                         <img src={logo} alt="logo"/>
                             <p>Реакцион</p>
                     </Link>
@@ -27,9 +45,9 @@ function Header() {
             </div>
             <nav className="two">
                 <ul className="cont">
-                    <li><Link to="/auctions">Аукционы</Link></li>
-                    <li><Link to="/vendors">Продавцы</Link></li>
-                    <li><Link to="/">Контакты</Link></li>
+                    <li><Link to="/auctions" onClick={(e) => handler(1)}  className={active === 1 ? "active" : ""}>Аукционы</Link></li>
+                    <li><Link to="/vendors" onClick={(e) => handler(2)} className={active === 2 ? "active" : ""}>Продавцы</Link></li>
+                    <li><Link to="/" onClick={(e) => handler(3)} className={active === 3 ? "active" : ""}>Контакты</Link></li>
                 </ul>
             </nav>
         </header>

@@ -14,12 +14,14 @@ function Main() {
         countAuctions: 3
     }
     const data1 = {
+        id: 1,
         image: lot,
         name: "Шляпы Ивана",
         timeIn: "2023-05-12T11:40:10.048321",
         bidIn: "73Битка"
     }
     const data2 = {
+        id: 1,
         image: lot,
         name: "Шляпы Ивана",
     }
