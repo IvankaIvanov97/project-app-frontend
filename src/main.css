@@ -557,6 +557,7 @@ footer {
     border-radius: 5px;
 }
 .lot_form label button {
+    cursor: pointer;
     width: 50%;
     display: flex;
     justify-content: center;
@@ -567,6 +568,7 @@ footer {
     color: #fff;
 }
 .lot_buy {
+    cursor: pointer;
     width: 40%;
     display: flex;
     justify-content: center;
@@ -592,6 +594,7 @@ footer {
     margin-bottom: 20px;
 }
 .lot_tabs li {
+    cursor: pointer;
     width: 100%;
     background-color: var(--main-color);
     padding: 2% 0;

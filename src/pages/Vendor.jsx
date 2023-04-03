@@ -1,5 +1,5 @@
 import React from "react";
-import {Link, useParams, useSearchParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 import Lot from "../components/Lot";
 
@@ -11,7 +11,6 @@ import lot from "../assets/img/lot.png";
 
 function Vendor() {
     const { id } = useParams();
-    console.log(id)
     const lotInfo = {
         image: lot,
         name: "Шляпы Ивана",

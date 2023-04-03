@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 
 import { startTimer } from "../timer"
 import eye from "../assets/img/eye.svg";
-import like from "../assets/img/like.svg";
 import {Link} from "react-router-dom";
 
 function Lot({ data }) {
@@ -13,7 +12,7 @@ function Lot({ data }) {
     // let MySQLDate = "2023-05-12T11:40:10.048321";
     let timer
 
-    useEffect(() => {
+    useEffect((bidIn = bidIn, timeIn = timeIn, timer = timer) => {
         if (bidIn !== undefined) {
             setBid(bidIn)
         }
@@ -28,9 +27,6 @@ function Lot({ data }) {
                     <div className="lot_btns">
                         <Link to={`/lot/${id}`} className="btn_lot eye">
                             <img src={eye} alt="eye"/>
-                        </Link>
-                        <Link className="btn_lot like">
-                            <img src={like} alt="like"/>
                         </Link>
                     </div>
                     {Object.keys(time).length !== 0 && <div className="time_info">

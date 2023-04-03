@@ -9,7 +9,6 @@ import {prepareTime, startTimer} from "../timer";
 import {Link} from "react-router-dom";
 import web from "../assets/img/web.svg";
 import Lot from "../components/Lot";
-import VendorFilter from "../components/VendorFilter";
 function ProductCard() {
     const data1 = {
         id: 1,
@@ -49,9 +48,9 @@ function ProductCard() {
     }
     let timer
     const [time, setTime] = useState({})
-    useEffect(() => {
-        if (prod.time !== undefined) {
-            startTimer(setTime, timer, prod.time)
+    useEffect((time = prod.time, timer = timer) => {
+        if (time !== undefined) {
+            startTimer(setTime, timer, time)
         }
     }, [])
     const [tab, setTab] = useState(0)
@@ -105,8 +104,8 @@ function ProductCard() {
                         <li className={tab === 1 && "active"} onClick={()=>{tabHandler(1)}}>История аукциона</li>
                         <li className={tab === 2 && "active"} onClick={()=>{tabHandler(2)}}>О продавце</li>
                     </ul>
-                    <p className={`lot_description ${tab === 0 ? "active" : ""}`}>{prod.description}</p>
-                    <div className={`lot_history ${tab === 1 ? "active" : ""}`}>
+                    {tab === 0 && <p className="lot_description active">{prod.description}</p>}
+                    {tab === 1 && <div className="lot_history active">
                         <div className="row_title">
                             <div className="col">Время</div>
                             <div className="col">Ставка</div>
@@ -121,8 +120,8 @@ function ProductCard() {
                                 </div>
                             )
                         )}
-                    </div>
-                    <div className={`lot_vendor ${tab === 2 ? "active" : ""}`}>
+                    </div>}
+                    {tab === 2 && <div className="lot_vendor active">
                         <div className="card_vendor">
                             <img src={prod.vendor.image} alt="" />
                             <p>{prod.vendor.name}</p>
@@ -139,7 +138,8 @@ function ProductCard() {
                             <img src={web} alt="" />
                             <Link to={prod.vendor.site}>{prod.vendor.site}</Link>
                         </div>
-                    </div>
+                    </div>}
+
                 </div>
                 <div className="lot_products">
                     <h2>Продукты продавца</h2>
