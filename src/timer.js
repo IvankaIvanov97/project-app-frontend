@@ -3,8 +3,12 @@ const _second = 1000;
 const _minute = _second * 60;
 const _hour = _minute * 60;
 const _day = _hour * 24;
+export const API_URL = 'http://127.0.0.1:8000/api_v1/'
 
 export function startTimer (setState, timer, time) {
+    if (time === null) {
+        return;
+    }
     let date = prepareTime(time)
     function showRemaining() {
         const distance = new Date(date) - new Date();
