@@ -25,6 +25,7 @@ function App() {
           <Route path="/vendors" element={<Vendors />}></Route>
           <Route path="/vendor/:id" element={<Vendor />}></Route>
           <Route path="/lot" element={<ProductCard />}></Route>
+          <Route path="/lord_of_site" element={<Error />}></Route>
           <Route path="*" element={<Error />}></Route>
         </Routes>
         <Footer />

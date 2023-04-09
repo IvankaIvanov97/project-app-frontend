@@ -8,9 +8,11 @@ import phone from "../assets/img/phone.svg";
 import {prepareTime, startTimer} from "../timer";
 import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import web from "../assets/img/web.svg";
+import no_photo from "../assets/img/no_photo.jpg";
 import Lot from "../components/Lot";
 import axios from "axios";
 import {API_URL} from "../timer";
+import no_ava from "../assets/img/no_ava.jpg";
 function ProductCard() {
     const [queryParameters] = useSearchParams()
     const [auction, setAuction] = useState({})
@@ -21,6 +23,37 @@ function ProductCard() {
     const [minBet, setMinBet] = useState(0)
     function checkInput(e) {
         e.target.value < minBet ? setBet(minBet) : setBet(e.target.value)
+    }
+
+    function postBet() {
+        // localStorage
+        if (bet > minBet) {
+            axios({
+                method: 'post',
+                url: `${API_URL}auction/${queryParameters.get("id")}/bet?bet_size=${bet}`,
+                headers: { 'Content-Type': 'application/json' },
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+    }
+    function buyBet() {
+        // localStorage
+            axios({
+                method: 'post',
+                url: `${API_URL}auction/${queryParameters.get("id")}/buy_now`,
+                headers: { 'Content-Type': 'application/json' },
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
     }
 
     useEffect(() => {
@@ -59,65 +92,14 @@ function ProductCard() {
                 console.log(error);
             });
     }, [])
-    const data1 = {
-        id: 1,
-        image: lot,
-        name: "Шляпы Ивана",
-        timeIn: "2023-05-12T11:40:10.048321",
-        bidIn: "73Битка"
-    }
-    const prod = {
-        id: 1,
-        lot_name: "Шляпы Ивана",
-        lot_photo_path: lot,
-        lot_description: "Отец Айвена-шляпный мастер в Хэтвилле, где все носили шляпы, которые должны были показать, какая у них карьера. Иван приближался к своему собственному Шляпному Дню, когда он получит свою собственную шляпу.",
-        auction_bets: [
-            {
-                bet_datetime: "2023-04-05T20:02:51.780748",
-                bet_size: 100,
-                bet_user: null,
-                id: 1
-            },
-            {
-                bet_datetime: "2023-04-05T20:02:51.780848",
-                bet_size: 200,
-                bet_user: null,
-                id: 2
-            }
-        ],
-        lot_min_bet: 11.5,
-        lot_hot_price: 2000,
-        bid: "91Битка",
-        lot_end_datetime: "2023-05-12T11:40:10.048321",
-        buyNow: "200Битков",
-        category: 1,
-        history: [
-            {
-                time: "2023-04-11T11:40:10.048321",
-                bid: "91",
-                user: "Иван Царевич",
-            },
-            {
-                time: "2023-04-01T11:40:10.048321",
-                bid: "5",
-                user: "Тони Старк",
-            }
-        ],
-        vendor: {
-            image: ava,
-            name: "Тони Старк",
-            address: "ул. Строителей, д.10, 5 этаж",
-            phone: "89952455313",
-            site: "tony-top.com",
-        }
-    }
+
     let timer
     const [time, setTime] = useState({})
-    useEffect(() => {
-        if (prod.time !== undefined) {
-            startTimer(setTime, timer, prod.time)
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (prod.time !== undefined) {
+    //         startTimer(setTime, timer, prod.time)
+    //     }
+    // }, [])
     const [tab, setTab] = useState(0)
     
     function tabHandler(e) {
@@ -132,7 +114,12 @@ function ProductCard() {
                         <div className="line"></div>
                         <div className="lot_first">
                             <div className="lot_galery">
-                                <img className="lot_main" src={auction.lot_photo_path} alt="" />
+
+                                {auction.lot_photo_path === null ?
+                                    <img className="lot_main" src={no_photo} alt=""/> :
+                                    <img className="lot_main" src={auction.lot_photo_path} alt="" />
+                                }
+
                                 {/*<div className="lot_carusel">*/}
                                 {/*    {prod.imagesCarousel && prod.imagesCarousel.map((image, index) =>*/}
                                 {/*        <img key={index} src={image} alt="" />*/}
@@ -160,9 +147,9 @@ function ProductCard() {
                                 <div className="lot_form">
                                     <label htmlFor="bid">
                                         <input value={bet} onChange={(e) => checkInput(e)} min={auction.auction_bets.length > 0 ? auction.auction_bets[0].bet_size : auction.lot_min_bet} type="number" name="bid" id="bid" />
-                                        <button onClick={() => {}}>Ставка</button>
+                                        <button onClick={postBet}>Ставка</button>
                                     </label>
-                                    <button className="lot_buy">Купить сейчас за {auction.lot_hot_price} ₽</button>
+                                    <button onClick={buyBet} className="lot_buy">Купить сейчас за {auction.lot_hot_price} ₽</button>
                                 </div>
                                 <p className="lot_category">
                                     Категория: <Link to={`/auctions/category/${auction.category.id}`}>{auction.category.name}</Link>
@@ -194,7 +181,10 @@ function ProductCard() {
                             </div>}
                             {tab === 2 && <div className="lot_vendor active">
                                 <div className="card_vendor">
-                                    <img src={auction.lot_vendor.vendor_photo_path} alt="" />
+                                    {auction.lot_vendor.vendor_photo_path !== null ?
+                                        <img src={auction.lot_vendor.vendor_photo_path} alt="" /> :
+                                        <img src={no_ava} alt="" />
+                                    }
                                     <p>{auction.lot_vendor.vendor_name}</p>
                                 </div>
                                 <div className="vendor_string">
@@ -212,12 +202,13 @@ function ProductCard() {
                             </div>}
 
                         </div>
-                        <div className="lot_products">
+                        {products.length > 0 && <div className="lot_products">
                             <h2>Продукты продавца</h2>
                             <div className="grid_auctions">
-                                <Lot data={data1} />
+                                {products.map((product, i) => <Lot key={i} data={product} />)}
                             </div>
-                        </div>
+                        </div>}
+
                     </>
                 }
 

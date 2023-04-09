@@ -35,7 +35,6 @@ function Main() {
         })
             .then(function (response) {
                 setCategories(response.data)
-                console.log(response.data);
             })
             .catch(function (error) {
                 // обработка ошибок
@@ -88,8 +87,6 @@ function Main() {
                             {activeAuctions && activeAuctions.map((data, i) =>
                                 <Lot key={i} data={data} />
                             )}
-                            <Lot data={data2} />
-                            <Lot data={data2} />
                         </div> :
                         <p className="nothing">SUUUS</p>
                     }

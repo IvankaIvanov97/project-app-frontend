@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 
 import { startTimer } from "../timer"
 import eye from "../assets/img/eye.svg";
+import no_photo from "../assets/img/no_photo.jpg";
 import {Link} from "react-router-dom";
 import {logDOM} from "@testing-library/react";
 
@@ -26,7 +27,10 @@ function Lot({ data }) {
     return (
         <div className="lot">
             <div className="img_frag">
-                <img className="lot_img" src={lot_photo_path} alt=""/>
+                {lot_photo_path === null ?
+                    <img className="lot_img" src={no_photo} alt=""/> :
+                    <img className="lot_img" src={lot_photo_path} alt=""/>
+                }
                     <div className="lot_btns">
                         <Link to={`/lot?id=${id}`} className="btn_lot eye">
                             <img src={eye} alt="eye"/>

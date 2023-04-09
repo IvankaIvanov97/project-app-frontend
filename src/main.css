@@ -352,7 +352,7 @@ footer {
     width: fit-content;
 }
 .sort::after {
-    content: url("./assets/img/arrow_down.svg");
+    content: url("assets/img/arrow_down.svg");
     margin-left: 5px;
 }
 .shop_grid {
@@ -557,7 +557,6 @@ footer {
     border-radius: 5px;
 }
 .lot_form label button {
-    cursor: pointer;
     width: 50%;
     display: flex;
     justify-content: center;
@@ -567,8 +566,22 @@ footer {
     background-color: var(--main-color);
     color: #fff;
 }
+.card_vendor {
+    display: flex;
+}
+.card_vendor img {
+    width: 100px;
+    border-radius: 50%;
+    border: 4px solid var(--main-color);
+    margin: 0 5px 10px 0;
+}
+.card_vendor p {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
 .lot_buy {
-    cursor: pointer;
     width: 40%;
     display: flex;
     justify-content: center;
@@ -594,7 +607,6 @@ footer {
     margin-bottom: 20px;
 }
 .lot_tabs li {
-    cursor: pointer;
     width: 100%;
     background-color: var(--main-color);
     padding: 2% 0;
@@ -611,14 +623,9 @@ footer {
     color: var(--main-color);
     background-color: #fff;
 }
-.lot_description, .lot_history, .lot_vendor {
-    display: none;
-}
-.lot_description.active, .lot_history.active, .lot_vendor.active {
-    display: block;
-}
 .lot_history {
     border: 1px #000 solid;
+    
 }
 .row_title, .row {
     display: flex;
@@ -639,25 +646,73 @@ footer {
     border-bottom: none;
 }
 
-.sus {
-    font-size: 42px;
+/* login */
+
+.back {
+    z-index: 5;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #0008;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login {
+    border-radius: 15px;
+    width: 30%;
+    background-color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+.log_block {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+}
+.log_block .head {
+    font-size: 18px;
     font-weight: 700;
-    text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+}
+.log_block input {
+    font-weight: 300;
+    font-size: 16px;
+    outline: none;
+    border: solid 1px var(--main-color);
+    border-radius: 4px;
+    padding: 5px;
+    margin-bottom: 10px;
 }
 
-.card_vendor {
-    display: flex;
-    align-items: center;
+.log_block button {
+    background-color: var(--main-color);
+    border-radius: 4px;
+    font-size: 16px;
+    border: none;
+    color: #fff;
+    padding: 10px 0;
+}
+.login img {
+    position: absolute;
+    right: 3%;
+    top: 7%;
+    width: 17px;
+    cursor: pointer;
+}
+
+.sus {
+    font-size: 42px;
+    text-align: center;
     margin-bottom: 20px;
-}
-.card_vendor img {
-    width: 10%;
-    border: 4px solid var(--main-color);
-    border-radius: 50%;
-    margin-right: 15px;
-}
-.card_vendor p {
-    text-transform: uppercase;
     font-weight: 700;
+}
+.nothing {
+    font-size: 18px;
+    text-align: center;
+    font-weight: 300;
 }

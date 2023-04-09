@@ -14,8 +14,53 @@ import {API_URL} from "../timer";
 function Auctions() {
     const [queryParameters] = useSearchParams()
     const [auctions, setAuctions] = useState([])
+    const [vendors, setVendors] = useState([])
+    const [newAuctions, setNewAuctions] = useState([])
+    const [categories, setCategories] = useState([])
     const categoryId = queryParameters.get("category")
     useEffect(() => {
+        axios({
+            method: 'get',
+            url:
+                API_URL + 'auctions/vendors',
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(function (response) {
+                setVendors(response.data)
+            })
+            .catch(function (error) {
+                // обработка ошибок
+                console.log(error);
+            });
+
+        axios({
+            method: 'get',
+            url:
+                API_URL + 'auctions/status/OPEN',
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(function (response) {
+                setNewAuctions(response.data)
+            })
+            .catch(function (error) {
+                // обработка ошибок
+                console.log(error);
+            });
+
+        axios({
+            method: 'get',
+            url:
+                API_URL + 'auctions/category',
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(function (response) {
+                setCategories(response.data)
+            })
+            .catch(function (error) {
+                // обработка ошибок
+                console.log(error);
+            });
+
         if (categoryId !== null) {
             axios({
                 method: 'get',
@@ -25,7 +70,6 @@ function Auctions() {
             })
                 .then(function (response) {
                     setAuctions(response.data)
-                    console.log(response.data)
                 })
                 .catch(function (error) {
                     // обработка ошибок
@@ -41,14 +85,13 @@ function Auctions() {
             })
                 .then(function (response) {
                     setAuctions(response.data)
-                    console.log(response.data)
                 })
                 .catch(function (error) {
                     // обработка ошибок
                     console.log(error);
                 });
         }
-    }, [])
+    }, [queryParameters])
     const category_ = {
         id: 1,
         name: "Шляпское искусство"
@@ -66,9 +109,9 @@ function Auctions() {
     }
     const auction = {
         id: 1,
-        name: "Шляпа Ивана",
+        lot_name: "Шляпа Ивана",
         image: lot,
-        bid: "73Битка"
+        current_bet: "73"
     }
     return (
             <section>
@@ -79,19 +122,23 @@ function Auctions() {
                             <VendorFilter data={vendor_} />
                             <VendorFilter data={vendor_} />
                         </div>
-                        <div className="filter_block">
+                        {newAuctions.length > 0 && <div className="filter_block">
                             <p className="filter_head">Новые аукционы</p>
                             <div className="filter_auctions">
-                                <AuctionFilter data={auction} />
-                                <AuctionFilter data={auction} />
+                                {newAuctions.map((newAuction, i) =>
+                                    <AuctionFilter key={i} data={newAuction} />
+                                )}
                             </div>
-                        </div>
+                        </div>}
                         <div className="filter_block">
                             <p className="filter_head">Категории аукционов</p>
                             <div className="filter_categories">
-                                <Link to="/auctions" state={category_.name}>{category_.name}</Link>
+                                {categories.map((category, i) =>
+                                    <Link key={i} to={`/auctions?category=${category.id}`} >{category.name}</Link>
+                                )}
                             </div>
                         </div>
+
                     </div>
                     <div className="shop">
                         <div className="shop_sort">
@@ -99,9 +146,9 @@ function Auctions() {
                             <div className="sort">По убыванию</div>
                         </div>
                         <div className="shop_grid">
-                            <Lot data={data1} />
-                            <Lot data={data1} />
-                            <Lot data={data1} />
+                            {auctions.map((auction, i) =>
+                                <Lot key={i} data={auction}/>
+                            )}
                         </div>
                     </div>
                 </div>
