@@ -21,7 +21,6 @@ function Main() {
         })
             .then(function (response) {
                 setActiveAuctions(response.data)
-                console.log(response);
             })
             .catch(function (error) {
                 // обработка ошибок
@@ -36,7 +35,7 @@ function Main() {
         })
             .then(function (response) {
                 setCategories(response.data)
-                console.log(response);
+                console.log(response.data);
             })
             .catch(function (error) {
                 // обработка ошибок
@@ -51,7 +50,6 @@ function Main() {
         })
             .then(function (response) {
                 setClosedAuctions(response.data)
-                console.log(response);
             })
             .catch(function (error) {
                 // обработка ошибок
@@ -100,11 +98,11 @@ function Main() {
 
             <section>
                 <div className="cont categories">
-                    {categories.length > 0 ? <div className="grid_auctions">
+                    {categories.length > 0 ? <>
                             {categories && categories.map((category, i) =>
-                                <Category data={category} />
+                                <Category key={i} data={category} />
                             )}
-                        </div> :
+                        </> :
                         <p className="nothing">SUUUS</p>
                     }
                 </div>

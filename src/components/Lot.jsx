@@ -28,7 +28,7 @@ function Lot({ data }) {
             <div className="img_frag">
                 <img className="lot_img" src={lot_photo_path} alt=""/>
                     <div className="lot_btns">
-                        <Link to={`/lot/${id}`} className="btn_lot eye">
+                        <Link to={`/lot?id=${id}`} className="btn_lot eye">
                             <img src={eye} alt="eye"/>
                         </Link>
                     </div>

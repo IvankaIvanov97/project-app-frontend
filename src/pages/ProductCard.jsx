@@ -6,15 +6,16 @@ import map from "../assets/img/map.svg";
 import phone from "../assets/img/phone.svg";
 
 import {prepareTime, startTimer} from "../timer";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import web from "../assets/img/web.svg";
 import Lot from "../components/Lot";
 import axios from "axios";
 import {API_URL} from "../timer";
 function ProductCard() {
-    const { id } = useParams();
+    const [queryParameters] = useSearchParams()
     const [auction, setAuction] = useState({})
     const [products, setProducts] = useState([])
+    const navigate = useNavigate();
 
     const [bet, setBet] = useState(0)
     const [minBet, setMinBet] = useState(0)
@@ -26,7 +27,7 @@ function ProductCard() {
         axios({
             method: 'get',
             url:
-                API_URL + 'auction/' + id,
+                API_URL + 'auction/' + queryParameters.get("id"),
             headers: { 'Content-Type': 'application/json' },
         })
             .then(function (response) {
@@ -36,25 +37,25 @@ function ProductCard() {
                     data.auction_bets.reverse()
                 }
                 setMinBet(data.auction_bets.length > 0 ? data.auction_bets[0].bet_size : data.lot_min_bet)
+                setBet(data.auction_bets.length > 0 ? data.auction_bets[0].bet_size : data.lot_min_bet)
                 setAuction(data)
                 axios({
                     method: 'get',
                     url:
-                        API_URL + 'auctions/vendor/' + id,
+                        API_URL + 'auctions/vendor/' + data.lot_vendor.id,
                     headers: { 'Content-Type': 'application/json' },
                 })
                     .then(function (response) {
                         setProducts(response.data)
-                        console.log(response.data);
                     })
                     .catch(function (error) {
                         // обработка ошибок
                         console.log(error);
                     });
-                console.log(response.data);
             })
             .catch(function (error) {
                 // обработка ошибок
+                navigate("/error")
                 console.log(error);
             });
     }, [])
@@ -142,15 +143,19 @@ function ProductCard() {
                                 <p className="lot_desc">{auction.lot_description}</p>
                                 <p className="lot_bid">{auction.auction_bets.length > 0 ? `Текущая ставка: ${auction.auction_bets[0].bet_size} ₽` : auction.lot_min_bet !== null ? `Текущая ставка: ${auction.lot_min_bet} ₽` : "Прошедший аукцион"}</p>
                                 <div className="lot_time">
-                                    <p className="lot_time_head">Осталось времени:</p>
-                                    <div className="lot_time_sectors">
-                                        {Object.keys(time).map((keyName, i) => (
-                                            <div key={i + keyName} className="lot_time_sector">
-                                                <p className="lot_time_num">{time[keyName]}</p>
-                                                <p className="lot_time_type">{keyName}</p>
-                                            </div>
-                                        ))}
-                                    </div>
+                                    {auction.lot_status === "OPEN" ? <><p className="lot_time_head">Осталось времени:</p>
+                                        <div className="lot_time_sectors">
+                                            {Object.keys(time).map((keyName, i) => (
+                                                <div key={i + keyName} className="lot_time_sector">
+                                                    <p className="lot_time_num">{time[keyName]}</p>
+                                                    <p className="lot_time_type">{keyName}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        </>:
+                                        <p className="lot_time_head">Прошёл</p>
+                                    }
+
                                 </div>
                                 <div className="lot_form">
                                     <label htmlFor="bid">

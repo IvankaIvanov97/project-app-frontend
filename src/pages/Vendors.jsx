@@ -1,9 +1,8 @@
 import React from "react";
 
 import ava from "../assets/img/ava.png"
-import {Link, useSearchParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 function Vendors() {
-    const [params, setParams] = useSearchParams()
     const vendor = {
         id: 1,
         name: "Тони Старк",

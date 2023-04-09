@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Lot from "../components/Lot";
@@ -7,12 +7,48 @@ import lot from "../assets/img/lot.png";
 import ava from "../assets/img/ava.png";
 import VendorFilter from "../components/VendorFilter";
 import AuctionFilter from "../components/AuctionFilter";
-import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
+import {Link, useParams, useSearchParams} from "react-router-dom";
+import axios from "axios";
+import {API_URL} from "../timer";
 
 function Auctions() {
-    const { state } = useLocation();
-    const id = state !== null ? state.id : null;
-    const category = state !== null ? state.category : null;
+    const [queryParameters] = useSearchParams()
+    const [auctions, setAuctions] = useState([])
+    const categoryId = queryParameters.get("category")
+    useEffect(() => {
+        if (categoryId !== null) {
+            axios({
+                method: 'get',
+                url:
+                    API_URL + 'auctions/category/' + categoryId,
+                headers: { 'Content-Type': 'application/json' },
+            })
+                .then(function (response) {
+                    setAuctions(response.data)
+                    console.log(response.data)
+                })
+                .catch(function (error) {
+                    // обработка ошибок
+                    console.log(error);
+                });
+        }
+        else {
+            axios({
+                method: 'get',
+                url:
+                    API_URL + 'auctions',
+                headers: { 'Content-Type': 'application/json' },
+            })
+                .then(function (response) {
+                    setAuctions(response.data)
+                    console.log(response.data)
+                })
+                .catch(function (error) {
+                    // обработка ошибок
+                    console.log(error);
+                });
+        }
+    }, [])
     const category_ = {
         id: 1,
         name: "Шляпское искусство"
@@ -44,7 +80,7 @@ function Auctions() {
                             <VendorFilter data={vendor_} />
                         </div>
                         <div className="filter_block">
-                            <p className="filter_head">Новые аункционы</p>
+                            <p className="filter_head">Новые аукционы</p>
                             <div className="filter_auctions">
                                 <AuctionFilter data={auction} />
                                 <AuctionFilter data={auction} />
@@ -59,7 +95,7 @@ function Auctions() {
                     </div>
                     <div className="shop">
                         <div className="shop_sort">
-                            <p>Показано 9 из 33</p>
+                            <p>Показано: {auctions.length}</p>
                             <div className="sort">По убыванию</div>
                         </div>
                         <div className="shop_grid">

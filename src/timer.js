@@ -4,6 +4,7 @@ const _minute = _second * 60;
 const _hour = _minute * 60;
 const _day = _hour * 24;
 export const API_URL = 'http://127.0.0.1:8000/api_v1/'
+export const IMG_URL = 'http://127.0.0.1:8000/static'
 
 export function startTimer (setState, timer, time) {
     if (time === null) {

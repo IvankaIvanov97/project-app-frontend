@@ -21,9 +21,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Main />}></Route>
           <Route path="/auctions" element={<Auctions />}></Route>
+          {/*<Route path="/auctions/category/:id" element={<Auctions />}></Route>*/}
           <Route path="/vendors" element={<Vendors />}></Route>
           <Route path="/vendor/:id" element={<Vendor />}></Route>
-          <Route path="/lot/:id" element={<ProductCard />}></Route>
+          <Route path="/lot" element={<ProductCard />}></Route>
           <Route path="*" element={<Error />}></Route>
         </Routes>
         <Footer />
