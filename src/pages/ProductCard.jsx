@@ -27,11 +27,14 @@ function ProductCard() {
 
     function postBet() {
         // localStorage
-        if (bet > minBet) {
+        if (bet > minBet && localStorage.getItem("token") !== null) {
             axios({
                 method: 'post',
                 url: `${API_URL}auction/${queryParameters.get("id")}/bet?bet_size=${bet}`,
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                },
             })
                 .then(function (response) {
                     console.log(response);
@@ -40,13 +43,20 @@ function ProductCard() {
                     console.log(error);
                 });
         }
+        else {
+            alert("Ставка меньше суса, или вы не вошли, войдите или не сусайте!")
+        }
     }
     function buyBet() {
         // localStorage
+        if (localStorage.getItem("token") !== null) {
             axios({
                 method: 'post',
                 url: `${API_URL}auction/${queryParameters.get("id")}/buy_now`,
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                },
             })
                 .then(function (response) {
                     console.log(response);
@@ -54,6 +64,7 @@ function ProductCard() {
                 .catch(function (error) {
                     console.log(error);
                 });
+        }
     }
 
     useEffect(() => {
@@ -64,6 +75,7 @@ function ProductCard() {
             headers: { 'Content-Type': 'application/json' },
         })
             .then(function (response) {
+                console.log(response.data)
                 let data = response.data
                 if (Array.isArray(data.auction_bets)) {
                     data.auction_bets.sort()

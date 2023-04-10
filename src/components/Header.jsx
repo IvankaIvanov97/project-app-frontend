@@ -3,11 +3,12 @@ import logo from "../assets/img/logo.svg";
 import search from "../assets/img/search.svg";
 import enter from "../assets/img/enter.svg";
 
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Login from "./Login";
 function Header() {
     const [active, setActive] = useState(0)
     const [isLogin, setIsLogin] = useState(false)
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (window.location.href.indexOf("auctions") >= 0) {
@@ -25,7 +26,12 @@ function Header() {
         setActive(e)
     }
     function login() {
-        setIsLogin(true)
+        if (localStorage.getItem("token") !== null) {
+            navigate("/lk")
+        }
+        else {
+            setIsLogin(true)
+        }
     }
 
     return (
@@ -46,7 +52,7 @@ function Header() {
                         </label>
                         <a onClick={login} href="#" className="sign">
                             <img src={enter} alt="sign_in"/>
-                            <p>Войти</p>
+                            {/*<p>Войти</p>*/}
                         </a>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import axios from "axios";
-import {API_URL} from "../timer";
+import {API_LOGIN} from "../timer";
 import krest from "../assets/img/krest.svg"
 
 function Login({ state }) {
@@ -11,10 +11,19 @@ function Login({ state }) {
     function login() {
         axios({
             method: 'post',
-            url: API_URL + 'auth/token',
-            headers: { 'Content-Type': 'application/json' },
+            url: API_LOGIN,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: {
+                username: loginLogin,
+                password: loginPass
+            }
         })
             .then(function (response) {
+                localStorage.setItem("token", response.data.access_token)
+                state(false)
+                alert("ВЫ ВОШЛИ!!!!!")
                 console.log(response);
             })
             .catch(function (error) {
