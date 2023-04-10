@@ -1,11 +1,30 @@
+import axios from "axios";
 
 const _second = 1000;
 const _minute = _second * 60;
 const _hour = _minute * 60;
 const _day = _hour * 24;
-export const API_URL = 'http://127.0.0.1:8000/api_v1/'
-export const API_LOGIN = 'http://127.0.0.1:8000/auth/token'
-export const IMG_URL = 'http://127.0.0.1:8000/static'
+const URL = 'http://127.0.0.1:8000/'
+export const API_URL = URL + 'api_v1/'
+export const API_LOGIN = URL + 'auth/token'
+export const IMG_URL = URL + 'static'
+
+export async function checkToken(token) {
+    try {
+        const response = await axios({
+            method: 'get',
+            url:
+                API_URL + 'me',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        return response.data;
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 export function startTimer (setState, timer, time) {
     if (time === null) {
@@ -26,7 +45,6 @@ export function startTimer (setState, timer, time) {
         timeObj["Секунды"] = Math.floor((distance % _minute) / _second);
         setState(timeObj)
     }
-
     timer = setInterval(showRemaining, 1000);
 }
 

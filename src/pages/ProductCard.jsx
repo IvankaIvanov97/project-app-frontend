@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 import lot from "../assets/img/lot.png";
 import ava from "../assets/img/ava.png";
 import map from "../assets/img/map.svg";
 import phone from "../assets/img/phone.svg";
 
-import {prepareTime, startTimer} from "../timer";
+import {checkToken, prepareTime, startTimer} from "../timer";
 import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import web from "../assets/img/web.svg";
 import no_photo from "../assets/img/no_photo.jpg";
@@ -13,6 +13,7 @@ import Lot from "../components/Lot";
 import axios from "axios";
 import {API_URL} from "../timer";
 import no_ava from "../assets/img/no_ava.jpg";
+import {logDOM} from "@testing-library/react";
 function ProductCard() {
     const [queryParameters] = useSearchParams()
     const [auction, setAuction] = useState({})
@@ -26,45 +27,59 @@ function ProductCard() {
     }
 
     function postBet() {
-        // localStorage
-        if (bet > minBet && localStorage.getItem("token") !== null) {
-            axios({
-                method: 'post',
-                url: `${API_URL}auction/${queryParameters.get("id")}/bet?bet_size=${bet}`,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`,
-                },
+        if (bet > minBet) {
+            checkToken(localStorage.getItem("token")).then(function (response) {
+                console.log(response);
+                if (response !== undefined) {
+                    axios({
+                        method: 'post',
+                        url: `${API_URL}auction/${queryParameters.get("id")}/bet?bet_size=${bet}`,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+                else {
+                    alert("Залогиньтесь, сус!")
+                    localStorage.removeItem("token")
+                }
             })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
         }
         else {
-            alert("Ставка меньше суса, или вы не вошли, войдите или не сусайте!")
+            alert("Ставка меньше суса, не сусайте!")
         }
     }
     function buyBet() {
         // localStorage
-        if (localStorage.getItem("token") !== null) {
-            axios({
-                method: 'post',
-                url: `${API_URL}auction/${queryParameters.get("id")}/buy_now`,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`,
-                },
-            })
-                .then(function (response) {
-                    console.log(response);
+        checkToken(localStorage.getItem("token")).then(function (response) {
+            if (response !== undefined) {
+                axios({
+                    method: 'post',
+                    url: `${API_URL}auction/${queryParameters.get("id")}/buy_now`,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                    },
                 })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+            else {
+                alert("Залогиньтесь, сус!")
+                localStorage.removeItem("token")
+            }
+        })
     }
 
     useEffect(() => {
@@ -105,6 +120,27 @@ function ProductCard() {
             });
     }, [])
 
+
+
+
+    const ws = useRef(null);
+    const [test, setTest] = useState(null)
+    useEffect(() => {
+        ws.current = new WebSocket("wss://polkadot.webapi.subscan.io/socket"); // создаем ws соединение
+        ws.current.onopen = () => console.log("Соединение открыто");  // callback на ивент открытия соединения
+        ws.current.onclose = () => console.log("Соединение закрыто"); // callback на ивент закрытия соединения
+        gettingData()
+    }, [ws])
+    const gettingData = () => {
+        ws.current.onmessage = e => {
+            const message = JSON.parse(e.data);
+            setTest(message);
+        };
+    };
+
+
+
+
     let timer
     const [time, setTime] = useState({})
     // useEffect(() => {
@@ -140,9 +176,11 @@ function ProductCard() {
                             </div>
                             <div className="lot_info">
                                 <p className="lot_desc">{auction.lot_description}</p>
-                                <p className="lot_bid">{auction.auction_bets.length > 0 ? `Текущая ставка: ${auction.auction_bets[0].bet_size} ₽` : auction.lot_min_bet !== null ? `Текущая ставка: ${auction.lot_min_bet} ₽` : "Прошедший аукцион"}</p>
-                                <div className="lot_time">
-                                    {auction.lot_status === "OPEN" ? <><p className="lot_time_head">Осталось времени:</p>
+                                {auction.lot_status === "OPEN" ?
+                                    <p className="lot_bid">{auction.auction_bets.length > 0 ? `Текущая ставка: ${auction.auction_bets[0].bet_size} ₽` : auction.lot_min_bet !== null ? `Текущая ставка: ${auction.lot_min_bet} ₽` : "Прошедший аукцион"}</p> :
+                                    <p className="lot_bid">{auction.auction_bets.length > 0 ? `Лот продан за ${auction.auction_bets[0].bet_size} ₽` : auction.lot_min_bet !== null ? `Лот продан за ${auction.lot_min_bet} ₽` : "Прошедший аукцион"}</p>
+                                }
+                                    {auction.lot_status === "OPEN" ? <div className="lot_time"><p className="lot_time_head">Осталось времени:</p>
                                         <div className="lot_time_sectors">
                                             {Object.keys(time).map((keyName, i) => (
                                                 <div key={i + keyName} className="lot_time_sector">
@@ -151,18 +189,17 @@ function ProductCard() {
                                                 </div>
                                             ))}
                                         </div>
-                                        </>:
-                                        <p className="lot_time_head">Прошёл</p>
+                                        </div>:
+                                        <p className="lot_time_head_result">Прошёл</p>
                                     }
-
-                                </div>
-                                <div className="lot_form">
+                                {auction.lot_status === "OPEN" && <div className="lot_form">
                                     <label htmlFor="bid">
                                         <input value={bet} onChange={(e) => checkInput(e)} min={auction.auction_bets.length > 0 ? auction.auction_bets[0].bet_size : auction.lot_min_bet} type="number" name="bid" id="bid" />
                                         <button onClick={postBet}>Ставка</button>
                                     </label>
                                     <button onClick={buyBet} className="lot_buy">Купить сейчас за {auction.lot_hot_price} ₽</button>
-                                </div>
+                                </div>}
+
                                 <p className="lot_category">
                                     Категория: <Link to={`/auctions/category/${auction.category.id}`}>{auction.category.name}</Link>
                                 </p>
@@ -186,7 +223,7 @@ function ProductCard() {
                                         <div key={index} className="row">
                                             <div className="col">{new Date(prepareTime(obj.bet_datetime)).toString()}</div>
                                             <div className="col">{obj.bet_size}</div>
-                                            <div className="col">{obj.bet_user}</div>
+                                            <div className="col">{obj.bet_user !== null ? obj.bet_user.username : auction.lot_vendor.vendor_name}</div>
                                         </div>
                                     )
                                 )}

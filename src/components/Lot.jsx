@@ -7,18 +7,24 @@ import {Link} from "react-router-dom";
 import {logDOM} from "@testing-library/react";
 
 function Lot({ data }) {
-    const { lot_photo_path, lot_name, lot_end_datetime, current_bet, id } = data;
+    const { lot_photo_path, lot_name, lot_end_datetime, current_bet, id, lot_status } = data;
     const [time, setTime] = useState({})
-    const [bid, setBid] = useState(null)
+    const [bid, setBid] = useState(0)
 
     // let MySQLDate = "2023-05-12T11:40:10.048321";
     let timer
 
     useEffect(() => {
         if (current_bet !== undefined) {
-            if (current_bet !== null) {
+            if (lot_status !== "CLOSED" && current_bet !== null) {
                 setBid(current_bet)
             }
+            if (lot_status === "CLOSED") {
+                setBid(null)
+            }
+        }
+        else {
+            setBid(null)
         }
         if (lot_end_datetime !== undefined) {
             startTimer(setTime, timer, lot_end_datetime)

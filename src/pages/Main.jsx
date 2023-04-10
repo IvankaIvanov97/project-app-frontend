@@ -20,6 +20,7 @@ function Main() {
             headers: { 'Content-Type': 'application/json' },
         })
             .then(function (response) {
+                console.log(response.data);
                 setActiveAuctions(response.data)
             })
             .catch(function (error) {
@@ -55,28 +56,6 @@ function Main() {
                 console.log(error);
             });
     }, [])
-
-
-    const category = {
-        id: 1,
-        category_photo_path: category_back,
-        name: "Шляпное искусство",
-        count_of_active_auctions: 3
-    }
-    const data1 = {
-        id: 1,
-        image: lot,
-        name: "Шляпы Ивана",
-        timeIn: "2023-05-12T11:40:10.048321",
-        bidIn: "73Битка"
-    }
-    const data2 = {
-        id: 1,
-        lot_photo_path: lot,
-        lot_name: "Шляпы Ивана",
-        lot_end_datetime: "2023-05-12T11:40:10.048321",
-        current_bet: "73"
-    }
     return(
         <>
             <section>
@@ -112,8 +91,6 @@ function Main() {
                         {closedAuctions && closedAuctions.map((data, i) =>
                             <Lot key={i} data={data} />
                         )}
-                        <Lot data={data2} />
-                        <Lot data={data2} />
                     </div> :
                         <p className="nothing">SUUUS</p>
                     }

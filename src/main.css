@@ -519,6 +519,11 @@ footer {
 .lot_time_head {
     margin-bottom: 10px;
 }
+.lot_time_head_result {
+    margin: 20px 0;
+    font-size: 24px;
+    font-weight: 700;
+}
 .lot_time_sectors {
     -webkit-box-shadow: var(--standart-shadow);
     -moz-box-shadow: var(--standart-shadow);
@@ -568,6 +573,7 @@ footer {
 }
 .card_vendor {
     display: flex;
+    align-items: center;
 }
 .card_vendor img {
     width: 100px;
@@ -578,7 +584,6 @@ footer {
 .card_vendor p {
     font-size: 18px;
     font-weight: 700;
-    margin-bottom: 20px;
     text-transform: uppercase;
 }
 .lot_buy {
