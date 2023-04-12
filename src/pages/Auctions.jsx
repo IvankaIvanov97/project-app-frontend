@@ -7,22 +7,22 @@ import lot from "../assets/img/lot.png";
 import ava from "../assets/img/ava.png";
 import VendorFilter from "../components/VendorFilter";
 import AuctionFilter from "../components/AuctionFilter";
-import {Link, useParams, useSearchParams} from "react-router-dom";
+import {Link, useSearchParams} from "react-router-dom";
 import axios from "axios";
 import {API_URL} from "../timer";
 
 function Auctions() {
     const [queryParameters] = useSearchParams()
+    const categoryId = queryParameters.get("category")
     const [auctions, setAuctions] = useState([])
     const [vendors, setVendors] = useState([])
     const [newAuctions, setNewAuctions] = useState([])
     const [categories, setCategories] = useState([])
-    const categoryId = queryParameters.get("category")
     useEffect(() => {
         axios({
             method: 'get',
             url:
-                API_URL + 'auctions/vendors',
+                API_URL + 'vendors',
             headers: { 'Content-Type': 'application/json' },
         })
             .then(function (response) {
@@ -92,36 +92,16 @@ function Auctions() {
                 });
         }
     }, [queryParameters])
-    const category_ = {
-        id: 1,
-        name: "Шляпское искусство"
-    }
-    const data1 = {
-        image: lot,
-        name: "Шляпы Ивана",
-        timeIn: "2023-05-12T11:40:10.048321",
-        bidIn: "73Битка"
-    }
-    const vendor_ = {
-        id: 1,
-        name: "Тони Старк",
-        image: ava
-    }
-    const auction = {
-        id: 1,
-        lot_name: "Шляпа Ивана",
-        image: lot,
-        current_bet: "73"
-    }
     return (
             <section>
                 <div className="cont auctions">
                     <div className="filter">
-                        <div className="filter_block">
+                        {vendors.length > 0 && <div className="filter_block">
                             <p className="filter_head">Фильтр по продавцам</p>
-                            <VendorFilter data={vendor_} />
-                            <VendorFilter data={vendor_} />
-                        </div>
+                            {vendors.map((vendor, i) =>
+                                <VendorFilter key={i} data={vendor} />
+                            )}
+                        </div>}
                         {newAuctions.length > 0 && <div className="filter_block">
                             <p className="filter_head">Новые аукционы</p>
                             <div className="filter_auctions">

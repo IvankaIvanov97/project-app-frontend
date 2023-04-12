@@ -5,12 +5,23 @@ import enter from "../assets/img/enter.svg";
 
 import {Link, useNavigate} from "react-router-dom";
 import Login from "./Login";
+import {API_URL, checkToken} from "../timer";
+import axios from "axios";
 function Header() {
     const [active, setActive] = useState(0)
     const [isLogin, setIsLogin] = useState(false)
+    const [isAuth, setIsAuth] = useState(false)
     const navigate = useNavigate();
 
     useEffect(() => {
+        checkToken(localStorage.getItem("token")).then(function (response) {
+            if (response !== undefined) {
+                setIsAuth(true)
+            }
+            else {
+                setIsAuth(false)
+            }
+        })
         if (window.location.href.indexOf("auctions") >= 0) {
             setActive(1)
         }
@@ -26,12 +37,15 @@ function Header() {
         setActive(e)
     }
     function login() {
-        if (localStorage.getItem("token") !== null) {
-            navigate("/lk")
-        }
-        else {
-            setIsLogin(true)
-        }
+        checkToken(localStorage.getItem("token")).then(function (response) {
+            if (response !== undefined) {
+                navigate("/lk")
+            }
+            else {
+                setIsAuth(false)
+                setIsLogin(true)
+            }
+        })
     }
 
     return (
@@ -50,9 +64,12 @@ function Header() {
                                     <img src={search} alt="search"/>
                                 </button>
                         </label>
-                        <a onClick={login} href="#" className="sign">
-                            <img src={enter} alt="sign_in"/>
-                            {/*<p>Войти</p>*/}
+                        <a className="sign">
+                            <img onClick={login} style={{cursor: "pointer"}} src={enter} alt="sign_in"/>
+                            {isAuth && <p onClick={() => {
+                                localStorage.removeItem("token")
+                                setIsAuth(false)
+                            }} style={{fontSize: "15px", cursor: "pointer"}}>Выход</p>}
                         </a>
                     </div>
                 </div>

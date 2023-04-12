@@ -10,6 +10,7 @@ import Main from "./pages/Main";
 import Auctions from "./pages/Auctions";
 import Vendors from "./pages/Vendors";
 import Vendor from "./pages/Vendor";
+import Lk from "./pages/Lk";
 import Error from "./pages/Error";
 import ProductCard from "./pages/ProductCard";
 
@@ -20,10 +21,10 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Main />}></Route>
+          <Route path="/lk" element={<Lk />}></Route>
           <Route path="/auctions" element={<Auctions />}></Route>
-          {/*<Route path="/auctions/category/:id" element={<Auctions />}></Route>*/}
           <Route path="/vendors" element={<Vendors />}></Route>
-          <Route path="/vendor/:id" element={<Vendor />}></Route>
+          <Route path="/vendor" element={<Vendor />}></Route>
           <Route path="/lot" element={<ProductCard />}></Route>
           <Route path="/lord_of_site" element={<Error />}></Route>
           <Route path="*" element={<Error />}></Route>

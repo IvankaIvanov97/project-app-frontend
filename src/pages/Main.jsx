@@ -20,7 +20,6 @@ function Main() {
             headers: { 'Content-Type': 'application/json' },
         })
             .then(function (response) {
-                console.log(response.data);
                 setActiveAuctions(response.data)
             })
             .catch(function (error) {

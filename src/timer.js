@@ -6,7 +6,7 @@ const _hour = _minute * 60;
 const _day = _hour * 24;
 const URL = 'http://127.0.0.1:8000/'
 export const API_URL = URL + 'api_v1/'
-export const API_LOGIN = URL + 'auth/token'
+export const API_LOGIN = URL + 'auth/'
 export const IMG_URL = URL + 'static'
 
 export async function checkToken(token) {
@@ -24,6 +24,9 @@ export async function checkToken(token) {
     } catch (err) {
         console.error(err);
     }
+}
+export function handler(e, state) {
+    state(e.target.value)
 }
 
 export function startTimer (setState, timer, time) {
