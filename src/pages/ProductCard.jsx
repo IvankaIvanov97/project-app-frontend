@@ -46,9 +46,7 @@ function ProductCard() {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           })
-            .then(function (response) {
-              console.log(response);
-            })
+            .then(function (response) {})
             .catch(function (error) {
               console.log(error);
             });
@@ -131,7 +129,7 @@ function ProductCard() {
   }, []);
 
   const ws = useRef(null);
-  const [test, setTest] = useState(null);
+  const [responseWS, setResponseWS] = useState(null);
   useEffect(() => {
     ws.current = new WebSocket(
       "ws://127.0.0.1:8000/ws/" + queryParameters.get("id")
@@ -140,24 +138,34 @@ function ProductCard() {
     ws.current.onclose = () => console.log("Соединение закрыто"); // callback на ивент закрытия соединения
     gettingData();
   }, [ws]);
-  const gettingData = () => {
+  function gettingData() {
     ws.current.onmessage = (e) => {
       const message = JSON.parse(e.data);
       console.log(message);
-      setTest(message);
-
-      //   setTest(message);
+      if (message.event_type === "close") {
+        window.location.reload();
+      } else {
+        setResponseWS(message);
+      }
     };
-  };
-  useEffect(() => {
-    if (test) {
-      const newAuction = Object.assign({}, auction, {
-        auction_bets: [test, ...auction.auction_bets],
-      });
+  }
 
-      setAuction(newAuction); // обновляем состояние объекта
-    }
-  }, [test]);
+  useEffect(() => {
+    responseWS &&
+      setAuction({
+        ...auction,
+        auction_bets: [
+          {
+            bet_datetime: responseWS.datetime,
+            bet_size: parseInt(responseWS.bet_size),
+            bet_user: {
+              username: responseWS.user,
+            },
+          },
+          ...auction.auction_bets,
+        ],
+      });
+  }, [responseWS]);
 
   let timer;
   const [time, setTime] = useState({});
