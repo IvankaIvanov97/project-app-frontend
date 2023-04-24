@@ -5,7 +5,7 @@ import ava from "../assets/img/ava.png";
 import map from "../assets/img/map.svg";
 import phone from "../assets/img/phone.svg";
 
-import { checkToken, prepareTime, startTimer } from "../timer";
+import { IMG_URL, checkToken, prepareTime, startTimer } from "../timer";
 import {
   Link,
   useNavigate,
@@ -84,6 +84,8 @@ function ProductCard() {
     });
   }
 
+  let timer;
+  const [time, setTime] = useState({});
   useEffect(() => {
     axios({
       method: "get",
@@ -107,6 +109,9 @@ function ProductCard() {
             ? data.auction_bets[0].bet_size
             : data.lot_min_bet
         );
+        if (data.lot_end_datetime !== undefined) {
+          startTimer(setTime, timer, data.lot_end_datetime);
+        }
         setAuction(data);
         axios({
           method: "get",
@@ -167,13 +172,6 @@ function ProductCard() {
       });
   }, [responseWS]);
 
-  let timer;
-  const [time, setTime] = useState({});
-  // useEffect(() => {
-  //     if (prod.time !== undefined) {
-  //         startTimer(setTime, timer, prod.time)
-  //     }
-  // }, [])
   const [tab, setTab] = useState(0);
 
   function tabHandler(e) {
@@ -194,7 +192,7 @@ function ProductCard() {
                 ) : (
                   <img
                     className="lot_main"
-                    src={auction.lot_photo_path}
+                    src={IMG_URL + auction.lot_photo_path}
                     alt=""
                   />
                 )}
@@ -264,7 +262,7 @@ function ProductCard() {
 
                 <p className="lot_category">
                   Категория:{" "}
-                  <Link to={`/auctions/category/${auction.category.id}`}>
+                  <Link to={`/auctions?category=${auction.category.id}`}>
                     {auction.category.name}
                   </Link>
                 </p>
@@ -331,7 +329,10 @@ function ProductCard() {
                 <div className="lot_vendor active">
                   <div className="card_vendor">
                     {auction.lot_vendor.vendor_photo_path !== null ? (
-                      <img src={auction.lot_vendor.vendor_photo_path} alt="" />
+                      <img
+                        src={IMG_URL + auction.lot_vendor.vendor_photo_path}
+                        alt=""
+                      />
                     ) : (
                       <img src={no_ava} alt="" />
                     )}

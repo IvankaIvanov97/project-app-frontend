@@ -13,6 +13,7 @@ import Vendor from "./pages/Vendor";
 import Lk from "./pages/Lk";
 import Error from "./pages/Error";
 import ProductCard from "./pages/ProductCard";
+import Contacts from "./pages/Contacts";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Main />}></Route>
+          <Route path="/contacts" element={<Contacts />}></Route>
           <Route path="/lk" element={<Lk />}></Route>
           <Route path="/auctions" element={<Auctions />}></Route>
           <Route path="/vendors" element={<Vendors />}></Route>

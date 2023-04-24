@@ -42,22 +42,31 @@ function AuctionCreate({ state }) {
   }, []);
 
   function send() {
-    console.log(beginTime);
-    // axios({
-    //     method: 'post',
-    //     url: API_URL + "auction",
-    //     headers: {
-    //         'Content-Type': 'multipart/form-data'
-    //     },
-    //     data: {
-    //     }
-    // })
-    //     .then(function (response) {
-    //         console.log(response);
-    //     })
-    //     .catch(function (error) {
-    //         console.log(error);
-    //     });
+    console.log(lotCat);
+    axios({
+      method: "post",
+      url: API_URL + "auction",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      data: {
+        lot_category_id: lotCat,
+        lot_name: name,
+        lot_description: desc,
+        lot_min_bet: parseFloat(bet),
+        lot_hot_price: parseFloat(hotPrice),
+        lot_begin_datetime: beginTime,
+        lot_end_datetime: endTime,
+        lot_photo: photo,
+      },
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   return (
@@ -75,6 +84,7 @@ function AuctionCreate({ state }) {
           />
           {categories.length > 0 && (
             <select value={lotCat} onChange={(e) => setLotCat(e.target.value)}>
+              <option>Выберите категорию</option>
               {categories.map((category, i) => (
                 <option key={i} value={category.id}>
                   {category.name}
@@ -85,23 +95,22 @@ function AuctionCreate({ state }) {
           <textarea
             name="lot_description"
             placeholder="Описание"
+            value={desc}
             onChange={(e) => handler(e, setDesc)}
-          >
-            {desc}
-          </textarea>
+          ></textarea>
           <input
             value={bet}
             onChange={(e) => handler(e, setBet)}
             type="text"
             name="lot_min_bet"
-            placeholder="Ссылка на сайт"
+            placeholder="Ставка"
           />
           <input
             value={hotPrice}
             onChange={(e) => handler(e, setHotPrice)}
             type="text"
             name="lot_hot_price"
-            placeholder="Адрес магазина"
+            placeholder="Цена быстрой продажи"
           />
           <input
             value={beginTime}
