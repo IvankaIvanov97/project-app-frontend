@@ -803,6 +803,11 @@ footer {
   justify-content: space-between;
 }
 
+.adminka {
+  display: flex;
+  justify-content: space-between;
+}
+
 iframe {
   width: 48%;
   height: 30vw;

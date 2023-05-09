@@ -14,6 +14,7 @@ import Lk from "./pages/Lk";
 import Error from "./pages/Error";
 import ProductCard from "./pages/ProductCard";
 import Contacts from "./pages/Contacts";
+import Adminka from "./pages/Adminka";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/vendors" element={<Vendors />}></Route>
           <Route path="/vendor" element={<Vendor />}></Route>
           <Route path="/lot" element={<ProductCard />}></Route>
+          <Route path="/adminka" element={<Adminka />}></Route>
           <Route path="/lord_of_site" element={<Error />}></Route>
           <Route path="*" element={<Error />}></Route>
         </Routes>

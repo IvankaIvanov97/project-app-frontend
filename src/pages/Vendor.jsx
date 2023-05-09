@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import Lot from "../components/Lot";
 
-import ava from "../assets/img/ava.png";
+import no_ava from "../assets/img/no_ava.jpg";
 import map from "../assets/img/map.svg";
 import phone from "../assets/img/phone.svg";
 import web from "../assets/img/web.svg";
@@ -64,11 +64,20 @@ function Vendor() {
       <div className="cont vendor">
         <div className="vendor_block">
           <div className="vendor_left">
-            <img
+            {vendor.vendor_photo_path !== null ? (
+              <img
+                className="vendor_ava"
+                src={IMG_URL + vendor.vendor_photo_path}
+                alt=""
+              />
+            ) : (
+              <img className="vendor_ava" src={no_ava} alt="" />
+            )}
+            {/* <img
               className="vendor_ava"
               src={IMG_URL + vendor.vendor_photo_path}
               alt=""
-            />
+            /> */}
             <p className="vendor_title">{vendor.vendor_name}</p>
             <div className="vendor_info">
               <div className="vendor_string">
@@ -83,7 +92,9 @@ function Vendor() {
               </div>
               <div className="vendor_string">
                 <img src={web} alt="web" />
-                <Link to={vendor.store_site}>{vendor.store_site}</Link>
+                <Link to={"https://" + vendor.store_site}>
+                  {vendor.store_site}
+                </Link>
               </div>
             </div>
           </div>

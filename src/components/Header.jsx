@@ -71,6 +71,7 @@ function Header() {
                   onClick={() => {
                     localStorage.removeItem("token");
                     setIsAuth(false);
+                    navigate("/");
                   }}
                   style={{ fontSize: "15px", cursor: "pointer" }}
                 >

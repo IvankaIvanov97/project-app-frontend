@@ -25,73 +25,43 @@ function Lk() {
           },
         })
           .then(function (response) {
-            let id = response.data.id;
-            let username = response.data.username;
+            if (!!response.data.vendor_link) {
+              setUser({
+                id: response.data.id,
+                username: response.data.username,
+                vendor_photo_path: response.data.vendor_link.vendor_photo_path,
+              });
+              axios({
+                method: "get",
+                url:
+                  API_URL + "auctions/vendor/" + response.data.vendor_link.id,
+                headers: { "Content-Type": "application/json" },
+              })
+                .then(function (response) {
+                  setProducts(response.data);
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+            } else {
+              setUser({
+                id: response.data.id,
+                username: response.data.username,
+                vendor_photo_path: null,
+              });
+            }
             axios({
               method: "get",
-              url: API_URL + "vendor/" + id,
-              headers: { "Content-Type": "application/json" },
+              url: API_URL + "auctions/user",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
             })
               .then(function (response) {
-                setUser({
-                  id: id,
-                  username: username,
-                  vendor_photo_path: response.data.vendor_photo_path,
-                });
-                axios({
-                  method: "get",
-                  url: API_URL + "auctions/vendor/" + id,
-                  headers: { "Content-Type": "application/json" },
-                })
-                  .then(function (response) {
-                    setProducts(response.data);
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                  });
-                axios({
-                  method: "get",
-                  url: API_URL + "auctions/user?user_id=" + id,
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                  },
-                })
-                  .then(function (response) {
-                    setBuyProducts(response.data);
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                  });
+                setBuyProducts(response.data);
               })
               .catch(function (error) {
-                setUser({
-                  id: id,
-                  username: username,
-                  vendor_photo_path: null,
-                });
-                axios({
-                  method: "get",
-                  url: API_URL + "auctions/vendor/" + id,
-                  headers: { "Content-Type": "application/json" },
-                })
-                  .then(function (response) {
-                    setProducts(response.data);
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                  });
-                axios({
-                  method: "get",
-                  url: API_URL + "auctions/user?user_id=" + id,
-                  headers: { "Content-Type": "application/json" },
-                })
-                  .then(function (response) {
-                    setBuyProducts(response.data);
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                  });
                 console.log(error);
               });
           })
@@ -133,22 +103,20 @@ function Lk() {
           )}
         </div>
       </section>
-      <section>
-        <div className="cont">
-          <div className="line"></div>
-          <h2>Ваши аукционы</h2>
-          {products.length > 0 ? (
+      {products.length > 0 && (
+        <section>
+          <div className="cont">
+            <div className="line"></div>
+            <h2>Ваши аукционы</h2>
             <div className="grid_auctions">
               {products.map((product, i) => (
                 <Lot key={i} data={product} />
               ))}
             </div>
-          ) : (
-            <p className="nothing">SUUUS</p>
-          )}
-        </div>
-      </section>
-      {buyProducts.length > 0 ? (
+          </div>
+        </section>
+      )}
+      {buyProducts.length > 0 && (
         <section>
           <div className="cont">
             <div className="line"></div>
@@ -160,8 +128,6 @@ function Lk() {
             </div>
           </div>
         </section>
-      ) : (
-        <p className="nothing">SUUUS</p>
       )}
     </>
   );

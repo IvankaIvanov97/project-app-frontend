@@ -131,7 +131,7 @@ function Auctions() {
                 ).length
               }
             </p>
-            <div className="sort">По убыванию</div>
+            {/* <div className="sort">По убыванию</div> */}
           </div>
           <div className="shop_grid">
             {auctions

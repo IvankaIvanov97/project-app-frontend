@@ -62,6 +62,7 @@ function AuctionCreate({ state }) {
       },
     })
       .then(function (response) {
+        window.location.reload();
         console.log(response);
       })
       .catch(function (error) {

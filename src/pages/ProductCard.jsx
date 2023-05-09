@@ -72,6 +72,7 @@ function ProductCard() {
           },
         })
           .then(function (response) {
+            window.location.reload();
             console.log(response);
           })
           .catch(function (error) {
@@ -350,7 +351,7 @@ function ProductCard() {
                   </div>
                   <div className="vendor_string">
                     <img src={web} alt="" />
-                    <Link to={auction.lot_vendor.store_site}>
+                    <Link to={"https://" + auction.lot_vendor.store_site}>
                       {auction.lot_vendor.store_site}
                     </Link>
                   </div>
